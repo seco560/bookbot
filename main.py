@@ -1,6 +1,48 @@
-def main():
-    with open("books/frankenstein.txt") as f:
+def open_file_at_path(filepath):
+    with open(filepath) as f:
         file_contents = f.read()
-        print(file_contents)
+        return file_contents
+
+def get_word_count(contents):
+    all_words = contents.split()
+    return len(all_words)
+
+def get_character_occurrences(contents):
+    occurrence_map = {}
+    for char in contents.lower():
+        if char in occurrence_map:
+            occurrence_map[char] += 1
+        else:
+            occurrence_map[char] = 1
+    return occurrence_map
+
+def dict_to_list(dict_from_list):
+    list_from_dict = []
+    for k in dict_from_list:
+        v = dict_from_list[k]
+        list_from_dict.append({"key": k, "value": v})
+    return list_from_dict
+
+def sort_on_value(list_of_dicts):
+    return list_of_dicts["value"]
+
+def print_char_report(list_of_char_occurrences):
+    for occ in list_of_char_occurrences:
+        print(f"The '{occ['key']}' character was found {occ['value']} times.")
+
+def main():
+    frankenstein = open_file_at_path("books/frankenstein.txt")
+    frankenstein_words_count = get_word_count(frankenstein)
+    print(f"There are {frankenstein_words_count} words in Frankenstein.")
+    frankenstein_character_occurrences = get_character_occurrences(frankenstein)
+
+    chars_list = dict_to_list(frankenstein_character_occurrences)
+    only_chars = []
+    for char_occ in chars_list:
+        if char_occ["key"].isalpha():
+            only_chars.append(char_occ)
+
+    only_chars.sort(reverse=True, key=sort_on_value)
+    print_char_report(only_chars)
 
 main()

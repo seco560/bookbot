@@ -1,11 +1,10 @@
+from stats import get_num_words
+import sys
+
 def open_file_at_path(filepath):
     with open(filepath) as f:
         file_contents = f.read()
         return file_contents
-
-def get_word_count(contents):
-    all_words = contents.split()
-    return len(all_words)
 
 def get_character_occurrences(contents):
     occurrence_map = {}
@@ -28,15 +27,18 @@ def sort_on_value(list_of_dicts):
 
 def print_char_report(list_of_char_occurrences):
     for occ in list_of_char_occurrences:
-        print(f"The '{occ['key']}' character was found {occ['value']} times.")
+        print(f"{occ['key']}: {occ['value']}")
 
 def main():
-    frankenstein = open_file_at_path("books/frankenstein.txt")
-    frankenstein_words_count = get_word_count(frankenstein)
-    print(f"There are {frankenstein_words_count} words in Frankenstein.")
-    frankenstein_character_occurrences = get_character_occurrences(frankenstein)
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+    book = open_file_at_path(sys.argv[1])
+    book_words_count = get_num_words(book)
+    print(f"Found {book_words_count} total words.")
+    book_character_occurrences = get_character_occurrences(book)
 
-    chars_list = dict_to_list(frankenstein_character_occurrences)
+    chars_list = dict_to_list(book_character_occurrences)
     only_chars = []
     for char_occ in chars_list:
         if char_occ["key"].isalpha():
